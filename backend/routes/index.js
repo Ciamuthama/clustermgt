@@ -6,7 +6,7 @@ const routes = express.Router();
  
 routes.get("/", (req, res) => {
     memberSchema.find()
-    .then((results)=>req.json(results))
+    .then((results)=>res.json(results))
     .catch((err)=>console.log(err))
     return res.status(200).json({ message: "Welcome to the API" });
 });
