@@ -4,7 +4,7 @@ const memberSchema = require("../schema/schema");
 const routes = express.Router();
 
 routes.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http:localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST");
   next();
 });
@@ -35,5 +35,29 @@ routes.get("/:id", (req, res) => {
     .then((results) => res.json(results))
     .catch((err) => console.log(err));
 });
+
+routes.patch("/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+          const updatedMember = await memberSchema.findByIdAndUpdate(id, req.body, { new: true });
+      if (!updatedMember) {
+        return res.status(404).json({ error: 'Note not found' });
+      }
+      res.json(updatedMember);
+    } catch (err) {
+      res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+    }
+  });
+  
+  routes.delete("/:id", (req, res) => {
+    const id = req.params.id;
+    memberSchema.findByIdAndDelete(id)
+      .then((result) => {
+        res.json("Data successfully deleted");
+      })
+      .catch((err) => {
+        res.status(404).json(`ERROR${err}`);
+      });
+  });
 
 module.exports = routes;

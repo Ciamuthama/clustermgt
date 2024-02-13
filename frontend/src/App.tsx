@@ -1,4 +1,3 @@
-import "./App.css";
 import Form from "./component/form";
 
 function App() {
@@ -6,7 +5,9 @@ function App() {
 
   return (
     <>
-      <Form />
+      <div className="mx-auto">
+        <Form />
+      </div>
     </>
   );
 }
