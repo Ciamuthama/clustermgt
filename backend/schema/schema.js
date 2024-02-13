@@ -14,9 +14,7 @@ const newSchema = new Schema({
   telephone: {
     type: Number,
   },
-  date_of_join: {
-    type: Date,
-  },
+  
   district: {
     type: String,
   },
