@@ -132,7 +132,7 @@ return(
                       
                     </Card>
               <Button type="submit" onClick={() => handleSaveToDb(selectedMember)}>
-                Submit
+                Update
               </Button>
               </div>
               

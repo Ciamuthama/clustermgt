@@ -6,4 +6,14 @@
     html{
         background-color: white !important;
     }
+
+    #react-select-3-input{
+        min-width: 0 !important;
+        border: 0 !important;
+    }
+   
+    .css-w9q2zk-Input2::after{
+        min-width: 0 !important;
+        border: 0 !important;
+}
 }

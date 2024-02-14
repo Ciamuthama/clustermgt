@@ -4,7 +4,7 @@ import axios from "axios";
 import FormCard from "../card/formCard";
 import TableCard from "../card/tableCard";
 import NewMemberCard from "../card/newMemberCard";
-import { Button } from "flowbite-react";
+import { TextInput } from "flowbite-react";
 
 export type FormData = {
   _id: string;
@@ -66,7 +66,7 @@ export default function Form(){
   return (
     <div className="flex flex-col h-full mt-4 mx-3 gap-10 bg-white">
       <div className=" flex flex-col items-center">
-        <h2>Members</h2>
+        <TextInput/>
         {members.length > 0 && (
           <table className="table w-[90vw]">
             <thead>
@@ -107,7 +107,7 @@ export default function Form(){
       )}
      <div className="drawer"> <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-      <label htmlFor="my-drawer" className="btn btn-primary drawer-button float-right mr-[10rem]">Create New User</label>
+      <label htmlFor="my-drawer" className="btn bg-[#0E7490] hover:bg-[#276173] text-white drawer-button float-right mr-[2rem]">Create New User</label>
         </div>
         <div className="drawer-side">
         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
