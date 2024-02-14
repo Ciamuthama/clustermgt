@@ -1,22 +1,29 @@
 import React, { useState } from "react";
 import axios from "axios";
+
 import FormCard from "../card/formCard";
 import TableCard from "../card/tableCard";
+import NewMemberCard from "../card/newMemberCard";
+import { Button } from "flowbite-react";
 
-type FormData = {
+export type FormData = {
   _id: string;
-  member_no: number;
+  member_no: number | string;
   name: string;
-  id: number;
-  telephone: number;
+  id: number | string;
+  telephone: number | string;
   district: string;
   cluster: string;
   cluster_leader: string;
 };
 
-export default function Form() {
+
+
+export default function Form(){
   const [members, setMembers] = useState<FormData[]>([]);
   const [selectedMemberId, setSelectedMemberId] = useState(1);
+  const [openModal, setOpenModal] = useState(false);
+  const [openCreate,setOpenCreate] = useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -53,22 +60,40 @@ export default function Form() {
     (member) => member._id === selectedMemberId
   );
 
+  
+
+
   return (
-    <div className="flex mt-4 gap-10">
-      <div className="mx-2 flex flex-col items-center">
+    <div className="flex flex-col h-full mt-4 mx-3 gap-10 bg-white">
+      <div className=" flex flex-col items-center">
         <h2>Members</h2>
         {members.length > 0 && (
-          <ul>
+          <table className="table w-[90vw]">
+            <thead>
+              <tr>
+                <th>Avatar</th>
+                <th>Member Number</th>
+                <th>Member Name</th>
+                <th>Id</th>
+                <th>Telephone</th>
+                <th>District</th>
+                <th>Cluster</th>
+                <th>Cluster Leader</th>
+                <th>Date Joined</th>
+              </tr>
+            </thead>
             {members.map((member, index) => {
               return (
-                <TableCard
-                  member={member}
-                  index={index}
-                  handleMemberSelection={handleMemberSelection}
-                />
+                <tbody onClick={() => setOpenModal(true)}>
+                  <TableCard
+                    member={member}
+                    index={index}
+                    handleMemberSelection={handleMemberSelection}
+                  />
+                </tbody>
               );
             })}
-          </ul>
+          </table>
         )}
       </div>
       {selectedMember && (
@@ -76,8 +101,19 @@ export default function Form() {
           selectedMember={selectedMember}
           handleSave={handleSave}
           handleSaveToDb={handleSaveToDb}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
         />
       )}
+     <div className="drawer"> <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content">
+      <label htmlFor="my-drawer" className="btn btn-primary drawer-button float-right mr-[10rem]">Create New User</label>
+        </div>
+        <div className="drawer-side">
+        <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+       <div className="w-1/2"> <NewMemberCard   /></div>
+        </div>
+        </div>
     </div>
   );
 }

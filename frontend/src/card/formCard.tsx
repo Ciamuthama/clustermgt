@@ -1,12 +1,15 @@
-import { Label, TextInput, Card, Button } from "flowbite-react";
+import { Label, TextInput, Card, Button, Modal } from "flowbite-react";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-expect-error
-export default function FormCard({selectedMember, handleSave, handleSaveToDb}) {
+export default function FormCard({selectedMember, handleSave, handleSaveToDb,openModal,setOpenModal}) {
 return(
-    <div className="rounded mx-2 border">
-          <form className="mx-3 flex gap-10 flex-wrap">
-            <div className="grid grid-cols-2 gap-x-4 gap-y-0 mt-3">
+  
+  
+      <Modal show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>Member Form</Modal.Header>
+          <Modal.Body><form className=" flex gap-2 flex-wrap justify-center">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-0">
               <div className="w-[259px]">
                 <Label htmlFor="email" className="mb-1">
                   Member Number
@@ -21,7 +24,7 @@ return(
                       member_no: e.target.value,
                     })
                   }
-                />
+                  />
               </div>
               <div>
                 <Label htmlFor="first_name" className="mb-1">
@@ -37,7 +40,7 @@ return(
                       name: e.target.value,
                     })
                   }
-                />
+                  />
               </div>
               <div>
                 <Label htmlFor="email" className="mb-1">
@@ -85,7 +88,7 @@ return(
                       telephone: e.target.value,
                     })
                   }
-                />
+                  />
               </div>
               <div>
                 <Label htmlFor="email" className="mb-1">
@@ -101,7 +104,7 @@ return(
                       cluster: e.target.value,
                     })
                   }
-                />
+                  />
               </div>
               <div>
                 <Label htmlFor="email" className="mb-1">
@@ -122,18 +125,22 @@ return(
               </div>
                  
             </div>
-            <div className="flex flex-col gap-2 justify-end mt-5 mb-2">
-            <Card className="max-w-sm p-3 w-[45rem] h-[30rem]"
+            <div className="flex flex-col justify-center items-start gap-2 mt-3">
+            <Card className="max-w-sm p-3 w-[25rem] "
         imgAlt="Apple Watch Series 7 in colors pink, silver, and black"
         imgSrc="https://www.flowbite-react.com/images/products/apple-watch.png">
                       
                     </Card>
-              
               <Button type="submit" onClick={() => handleSaveToDb(selectedMember)}>
                 Submit
               </Button>
               </div>
+              
+           
+             
           </form>
-        </div>
+          </Modal.Body>
+          </Modal>
+        
 )
 }
