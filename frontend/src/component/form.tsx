@@ -5,6 +5,7 @@ import FormCard from "../card/formCard";
 import TableCard from "../card/tableCard";
 import NewMemberCard from "../card/newMemberCard";
 import { TextInput } from "flowbite-react";
+import { useParams } from "react-router-dom";
 
 export type FormData = {
   _id: string;
@@ -52,8 +53,38 @@ export default function Form() {
     setMembers(updatedMembers);
   };
 
+ 
+  
+ 
+   
   const handleSaveToDb = async (updatedMember: FormData) => {
-    await axios.post("http://localhost:3000/new", updatedMember);
+    try {
+      const patchNote = await fetch(
+        `http://localhost:3000/${updatedMember._id}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+           member_no:updatedMember.member_no,
+           name:updatedMember.name,
+           id:updatedMember.id,
+           telephone:updatedMember.telephone,
+           district:updatedMember.district,
+           cluster:updatedMember.cluster,
+           cluster_leader:updatedMember.cluster_leader
+
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const response = await patchNote.json();
+      console.log(response);
+     
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
 
   const selectedMember = members.find(

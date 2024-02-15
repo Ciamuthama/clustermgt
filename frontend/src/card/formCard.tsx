@@ -6,7 +6,7 @@ export default function FormCard({selectedMember, handleSave, handleSaveToDb,ope
 return(
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Member Form</Modal.Header>
-          <Modal.Body><form className=" flex gap-2 flex-wrap justify-center">
+          <Modal.Body><form className=" flex gap-2 flex-wrap justify-center" onSubmit={handleSaveToDb(selectedMember)}>
             <div className="grid grid-cols-2 gap-x-4 gap-y-0">
               <div className="w-[259px]">
                 <Label htmlFor="email" className="mb-1">
