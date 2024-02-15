@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+
 const newSchema = new Schema({
   member_no: {
     type: Number,
@@ -18,14 +19,15 @@ const newSchema = new Schema({
   district: {
     type: String,
   },
-  cluster: {
-    type: String,
-  },
+  cluster: [String],
   cluster_leader: {
     type: String,
   },
   join_date:{
     type: Date,
+  },
+  profile:{
+    type:String
   }
 });
 

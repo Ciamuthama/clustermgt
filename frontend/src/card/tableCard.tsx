@@ -8,10 +8,11 @@ export default function TableCard({ member, index, handleMemberSelection }) {
     <tr key={index} onClick={() => handleMemberSelection(member._id)}>
       <td>
         <Avatar
-          img="https://www.flowbite-react.com/images/people/profile-picture-5.jpg"
+          img={`http://localhost:3000/${member.profile}`}
           rounded
           className="border-0"
         ></Avatar>
+        
       </td>
       <td className="mt-1 truncate leading-5">{member.member_no}</td>
       <td className="text-sm font-semibold leading-6 ">{member.name}</td>

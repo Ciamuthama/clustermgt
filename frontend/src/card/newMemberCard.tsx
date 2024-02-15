@@ -1,27 +1,87 @@
+import axios from "axios";
 import { Button, FileInput, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import Creatable from "react-select/creatable";
 
-export default function NewMemberCard() {
+type Tag={
+  cluster:string,
+}
+
+type Profile ={
+  file:File | null,
+}
+
+type NewMember ={
+member_no: number | string;
+name: string;
+id: number | string;
+telephone: number | string;
+district: string;
+cluster: Tag[];
+cluster_leader: string;
+date_joined: string | Date;
+profile: Profile;
+}
+export default function NewMemberCard({getNextMemberNumber}) {
     const [fileName, setFileName] = useState('');
-     const [uploadProgress, setUploadProgress] = useState(0);
+    const [formData, setFormData] = useState<NewMember[]>([])
+    const newNumber = getNextMemberNumber()
   const options = [
     { value: "1", label: "1" },
     { value: "2", label: "2" },
     { value: "3", label: "3" },
   ];
 
+
+  
+  
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({
+      ...formData,
+      profile: e.target.files[0],
+    });
+    setFileName(e.target.files[0].name);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      Object.keys(formData).forEach((key) => {
+        formData.append(key, formData[key]);
+      });
+      formData.append("profile", formData.profile);
+
+      const response = await axios.post("http://localhost:3000/new", formData);
+      console.log(response.data);
+      // Handle successful response
+    } catch (error) {
+      console.error(error);
+      // Handle errors
+    }
+  };
+  
+  
   return (
     <>
       <div className="flex h-screen bg-white">
         <div>
-          <form className="mt-5 mx-8">
+          <form className="mt-5 mx-8"  onChange={handleSubmit} encType="multipart/form-data"  method="POST">
             <div className=" grid grid-cols-2 gap-6 mb-5 ">
                 <div>
               <div className="mb-2 block">
                 <Label htmlFor="member_no" value="Member number:" />
               </div>
-              <TextInput id="member_no" type="number" value={20} disabled />
+              <TextInput id="member_no" type="number" value={newNumber} onChange={handleChange} disabled />
             </div>
             <div>
               <div className="mb-2 block  w-[25rem]">
@@ -31,6 +91,7 @@ export default function NewMemberCard() {
                 id="member_name"
                 type="text"
                 placeholder="Member Name"
+                onChange={handleChange}
                 required
               />
             </div>
@@ -42,7 +103,9 @@ export default function NewMemberCard() {
               <TextInput
                 id="id"
                 type="number"
+                name="id"
                 placeholder="eg 1234......"
+                onChange={handleChange} 
                 required
               />
             </div>
@@ -56,6 +119,7 @@ export default function NewMemberCard() {
                 name="telephone"
                 type="tel"
                 placeholder="eg +254701........."
+                onChange={handleChange}
                 required
               />
             </div>
@@ -69,6 +133,7 @@ export default function NewMemberCard() {
                 name="district"
                 type="text"
                 placeholder="Nakuru"
+                onChange={handleChange}
                 required
               />
             </div>
@@ -77,9 +142,8 @@ export default function NewMemberCard() {
                 <Label htmlFor="cluster" value="Cluster:" />
               </div>
               <Creatable
-             
                 isSearchable
-                options={options}
+                name="cluster"
                 theme={(theme) => ({
                   ...theme,
                   colors: {
@@ -87,6 +151,12 @@ export default function NewMemberCard() {
                     primary: "rgb(21,157,200)",
                   },
                 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    cluster: e.value
+                  })
+                }
                 isMulti
               />
             </div>
@@ -100,6 +170,7 @@ export default function NewMemberCard() {
                 name="cluster_leader"
                 type="text"
                 placeholder="John Doe"
+                onChange={handleChange}
                 required
               />
             </div>
@@ -113,6 +184,7 @@ export default function NewMemberCard() {
                 name="join_date"
                 type="date"
                 value={new Date().toISOString().split("T")[0]}
+                onChange={handleChange} 
                 disabled
               />
             </div></div>
@@ -147,7 +219,7 @@ export default function NewMemberCard() {
                     PNG or JPG only (MAX. 10Mb)
                   </p>
                 </div>
-                <FileInput id="dropzone-file" accept="image/png, image/jpeg" className="hidden" onChange={(e) => setFileName(e.target.files[0].name)} />
+                <FileInput id="dropzone-file" accept="image/png, image/jpeg" name="profile" className="hidden" onChange={handleFileChange} />
               </Label>
             </div>
             <p className="font-semibold">{fileName}</p>

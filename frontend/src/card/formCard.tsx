@@ -1,4 +1,5 @@
-import { Label, TextInput, Card, Button, Modal } from "flowbite-react";
+import { Label, TextInput, Card, Button, Modal, Select } from "flowbite-react";
+import Creatable from "react-select/creatable";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-expect-error
@@ -88,22 +89,16 @@ return(
                   }
                   />
               </div>
-              <div>
-                <Label htmlFor="email" className="mb-1">
-                  Cluster
-                </Label>
-                <TextInput
-                  type="text"
-                  id="cluster"
-                  value={selectedMember.cluster}
-                  onChange={(e) =>
-                    handleSave({
-                      ...selectedMember,
-                      cluster: e.target.value,
-                    })
-                  }
-                  />
+              <div >
+              <div className=" block">
+                <Label htmlFor="cluster" value="Cluster:" />
               </div>
+             <Select name="cluster" id="cluster" multiple>
+              {selectedMember.cluster.map((c)=>
+              <option>{c}</option>
+              )}
+             </Select>
+            </div>
               <div>
                 <Label htmlFor="email" className="mb-1">
                   Cluster Leader
@@ -143,8 +138,8 @@ return(
             </div>
             <div className="flex flex-col justify-center items-start gap-2 mt-3">
             <Card className="max-w-sm p-3 w-[25rem] "
-        imgAlt="Apple Watch Series 7 in colors pink, silver, and black"
-        imgSrc="https://www.flowbite-react.com/images/products/apple-watch.png">
+        imgAlt={selectedMember.name}
+        imgSrc={`http://localhost:3000/${selectedMember.profile}`}>
                       
                     </Card>
               <Button type="submit" onClick={() => handleSaveToDb(selectedMember)}>

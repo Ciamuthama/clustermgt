@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-
 import FormCard from "../card/formCard";
 import TableCard from "../card/tableCard";
 import NewMemberCard from "../card/newMemberCard";
 import { TextInput } from "flowbite-react";
-import { useParams } from "react-router-dom";
 
 export type FormData = {
   _id: string;
@@ -16,7 +14,8 @@ export type FormData = {
   district: string;
   cluster: string;
   cluster_leader: string;
-  date_joined:string | Date;
+  date_joined: string | Date;
+  profile:  File | null;
 };
 
 export default function Form() {
@@ -24,13 +23,19 @@ export default function Form() {
   const [selectedMemberId, setSelectedMemberId] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState<FormData[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const pageSize = members.length > 0 ? members.length : 10
+  
+  
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000");
+        const response = await axios.get(`http://localhost:3000?page=${currentPage}&pageSize=${pageSize}`);
         setMembers(response.data);
         setSearch(response.data);
+        setTotalItems(response.headers['x-total-count'])
 
         if (selectedMemberId === 1 && response.data.length > 0) {
           setSelectedMemberId(response.data[0]._id);
@@ -40,7 +45,7 @@ export default function Form() {
       }
     };
     fetchData();
-  }, [selectedMemberId]);
+  }, [selectedMemberId, currentPage, pageSize]);
 
   const handleMemberSelection = (_id: React.SetStateAction<number>) => {
     setSelectedMemberId(_id);
@@ -53,10 +58,6 @@ export default function Form() {
     setMembers(updatedMembers);
   };
 
- 
-  
- 
-   
   const handleSaveToDb = async (updatedMember: FormData) => {
     try {
       const patchNote = await fetch(
@@ -64,14 +65,13 @@ export default function Form() {
         {
           method: "PATCH",
           body: JSON.stringify({
-           member_no:updatedMember.member_no,
-           name:updatedMember.name,
-           id:updatedMember.id,
-           telephone:updatedMember.telephone,
-           district:updatedMember.district,
-           cluster:updatedMember.cluster,
-           cluster_leader:updatedMember.cluster_leader
-
+            member_no: updatedMember.member_no,
+            name: updatedMember.name,
+            id: updatedMember.id,
+            telephone: updatedMember.telephone,
+            district: updatedMember.district,
+            cluster: updatedMember.cluster,
+            cluster_leader: updatedMember.cluster_leader,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +80,6 @@ export default function Form() {
       );
 
       const response = await patchNote.json();
-      console.log(response);
      
     } catch (error) {
       console.error("An error occurred:", error);
@@ -106,19 +105,31 @@ export default function Form() {
     }
   }
 
+  const getNextMemberNumber = () => {
+    const sortedMembers = [...members].sort(
+      (a, b) => Number(b.member_no) - Number(a.member_no)
+    );
+
+    return sortedMembers.length > 0
+      ? Number(sortedMembers[0].member_no) + 1
+      : 1;
+  };
+
+
+
   return (
     <div className="flex flex-col h-full mt-4 mx-3 gap-10 bg-white">
-       <TextInput
-          type="search"
-          onChange={(e) => {
-            SearchMember(e.target.value);
-          }}
-          placeholder="Search"
-          className="flex justify-center mx-auto w-[90vw] rounded-md"
-        />
-        <div className="flex flex-col flex-wrap items-center overflow-auto">
+      <TextInput
+        type="search"
+        onChange={(e) => {
+          SearchMember(e.target.value);
+        }}
+        placeholder="Search"
+        className="flex justify-center mx-auto w-[90vw] rounded-md"
+      />
+      <div className="flex flex-col flex-wrap items-center overflow-auto h-[90vh]">
         {search.length > 0 && (
-          <table className="table w-[90vw] ">
+          <table className="table w-[90vw]">
             <thead>
               <tr>
                 <th>Avatar</th>
@@ -134,7 +145,7 @@ export default function Form() {
             </thead>
             {search.map((member, index) => {
               return (
-                <tbody onClick={() => setOpenModal(true)}>
+                <tbody  onClick={() => setOpenModal(true)}>
                   <TableCard
                     member={member}
                     index={index}
@@ -146,6 +157,23 @@ export default function Form() {
           </table>
         )}
       </div>
+        <div className="flex items-center justify-center mt-4">
+        <button
+          className="btn mx-2 px-4 py-2 border rounded"
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous Page
+        </button>
+        {currentPage}
+        <button
+          className="btn mx-2 px-4 py-2 border rounded"
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={pageSize * currentPage >= totalItems} // Disable "Next Page" when the current page exceeds the total items
+        >
+          Next Page
+        </button>
+      </div>
       {selectedMember && (
         <FormCard
           selectedMember={selectedMember}
@@ -155,7 +183,7 @@ export default function Form() {
           setOpenModal={setOpenModal}
         />
       )}
-       <div className="drawer">
+      <div className="drawer">
         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           <label
@@ -172,7 +200,7 @@ export default function Form() {
             className="drawer-overlay"
           ></label>
           <div className="w-[40vw]">
-            <NewMemberCard />
+            <NewMemberCard getNextMemberNumber={getNextMemberNumber}/>
           </div>
         </div>
       </div>
