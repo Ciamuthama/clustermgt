@@ -4,8 +4,6 @@ import { Label, TextInput, Card, Button, Modal } from "flowbite-react";
 //@ts-expect-error
 export default function FormCard({selectedMember, handleSave, handleSaveToDb,openModal,setOpenModal}) {
 return(
-  
-  
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Member Form</Modal.Header>
           <Modal.Body><form className=" flex gap-2 flex-wrap justify-center">
@@ -124,6 +122,24 @@ return(
                 />
               </div>
                  
+              <div>
+                <Label htmlFor="email" className="mb-1">
+                  join_date
+                </Label>
+                <TextInput
+                  type="text"
+                  id="cluster"
+                  value={selectedMember.join_date}
+                  readOnly
+                  required
+                  onChange={(e) =>
+                    handleSave({
+                      ...selectedMember,
+                      cluster_leader: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
             <div className="flex flex-col justify-center items-start gap-2 mt-3">
             <Card className="max-w-sm p-3 w-[25rem] "

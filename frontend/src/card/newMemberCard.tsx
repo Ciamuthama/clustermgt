@@ -24,7 +24,7 @@ export default function NewMemberCard() {
               <TextInput id="member_no" type="number" value={20} disabled />
             </div>
             <div>
-              <div className="mb-2 block">
+              <div className="mb-2 block  w-[25rem]">
                 <Label htmlFor="member_name" value="Member Name:" />
               </div>
               <TextInput
@@ -72,7 +72,7 @@ export default function NewMemberCard() {
                 required
               />
             </div>
-            <div>
+            <div >
               <div className="mb-2 block">
                 <Label htmlFor="cluster" value="Cluster:" />
               </div>

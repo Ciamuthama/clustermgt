@@ -24,6 +24,9 @@ const newSchema = new Schema({
   cluster_leader: {
     type: String,
   },
+  join_date:{
+    type: Date,
+  }
 });
 
 const memberSchema = mongoose.model("Member", newSchema);
