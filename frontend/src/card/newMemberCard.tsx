@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Button, FileInput, Label, Select, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import Creatable from "react-select/creatable";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -10,71 +10,89 @@ export type Tag = {
 };
 
 type NewMember = {
-  member_no: number;
+  member_no: number | string;
   name: string;
   id: number | string;
   telephone: number | string;
   district: string;
   cluster: Tag[];
   cluster_leader: string;
-  join_date:  Date;
-  profile: FileList;
+  join_date: Date;
+  profile: File;
 };
+
 export default function NewMemberCard({
   getNextMemberNumber,
 }: {
   getNextMemberNumber: () => number;
 }) {
-  const { control, register, handleSubmit } = useForm<NewMember>();
-  // const [selectedTag, setSelectedTag] = useState<Tag[]>(tags);
-  // const [fileName, setFileName] = useState("");
-  // const [formData, setFormData] = useState<NewMember[]>([]);
+  const { control, handleSubmit } = useForm<NewMember>();
   const newNumber = getNextMemberNumber();
+  const [member_no, setMember_No] = useState(newNumber);
+  const [name, setName] = useState("");
+  const [id, setId] = useState(0);
+  const [telephone, setTelePhone] = useState();
+  const [district, setDistrict] = useState("");
+  const [cluster, setCluster] = useState([] as Tag[]);
+  const [cluster_leader, setCluster_Leader] = useState("");
+  const [join_date, setJoin_date] = useState(new Date(Date.now()));
+  const [profile, setProfile] = useState<File | null>(null);
 
-  // const options = [
-  //   { value: "chocolate", label: "Chocolate" },
-  //   { value: "strawberry", label: "Strawberry" },
-  //   { value: "vanilla", label: "Vanilla" },
-  // ];
+  const handleMemberNoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMember_No(Number(e.target.value));
+  };
 
-  // const handleChange = (e) => {
-  //   setFormData({
-  //     ...formData,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
 
-  // const handleFileChange = (e) => {
-  //   setFormData({
-  //     ...formData,
-  //     profile: e.target.files[0],
-  //   });
-  //   setFileName(e.target.files[0].name);
-  // };
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setId(Number(e.target.value));
+  };
 
-  const onSubmit = async (data) => {
-    const formData ={
-        member_no:data.member_no,
-        name:data.name,
-        id:data.id,
-        telephone: data.telephone,
-        district:data.district,
-        cluster: data.cluster,
-        cluster_leader:data.cluster_leader,
-        profile: URL.createObjectURL(data.profile[0]),
+  const handleTelephoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTelePhone(e.target.value);
+  };
 
+  const handleDistrictChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDistrict(e.target.value);
+  };
+
+  const handleClusterChange = (newValue: Tag[]) => {
+    setCluster(newValue);
+  };
+
+  const handleClusterLeaderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCluster_Leader(e.target.value);
+  };
+
+  const handleJoinDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setJoin_date(new Date(e.target.value));
+  };
+
+  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setProfile(files[0]);
     }
+  };
 
-  
-    const response = await axios.post("http://localhost:3000/new",
-      formData);
-    if (response.data) {
-      console.log(response);
-
-    } else {
-      console.log("an error occurred");
-
-    }
+  const onSubmit: SubmitHandler<NewMember> = async (data) => {
+    Promise.all([
+      axios
+        .post("http://localhost:3000/new", {
+          member_no: member_no,
+          name: name,
+          id: id,
+          telephone: telephone,
+          district: district,
+          cluster_leader: cluster_leader,
+          join_date: join_date,
+          cluster: cluster,
+          profile: profile,
+        })
+        .then((res) => console.log(res.data)),
+    ]);
   };
 
   return (
@@ -84,7 +102,8 @@ export default function NewMemberCard({
           <form
             className="mt-5 mx-8"
             onSubmit={handleSubmit(onSubmit)}
-            encType="multipart/form-data"
+            action="http://localhost:3000/new"
+            method="post"
           >
             <div className=" grid grid-cols-2 gap-6 mb-5 ">
               <div>
@@ -94,8 +113,8 @@ export default function NewMemberCard({
                 <TextInput
                   id="member_no"
                   type="number"
-                  value={newNumber}
-                  {...register("member_no")}
+                  value={member_no}
+                  onChange={handleMemberNoChange}
                   disabled
                 />
               </div>
@@ -105,108 +124,4 @@ export default function NewMemberCard({
                 </div>
                 <TextInput
                   id="name"
-                  type="text"
-                  placeholder="Member Name"
-                  {...register("name", { required: true })}
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="id" value="Identity Number(ID):" />
-                </div>
-                <TextInput
-                  id="id"
-                  type="number"
-                  placeholder="eg 1234......"
-                  {...register("id", { required: true })}
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="tel" value="Telephone:" />
-                </div>
-                <TextInput
-                  id="telephone"
-                  type="tel"
-                  placeholder="eg +254701........."
-                  {...register("telephone")}
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="district" value="District:" />
-                </div>
-                <TextInput
-                  id="district"
-                  type="text"
-                  placeholder="Nakuru"
-                  {...register("district")}
-                  required
-                />
-              </div>
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="cluster" value="Cluster:" />
-                </div>
-                <Controller
-                name="cluster"
-                control={control}
-                render={({ field }) => (
-                  <Creatable
-                    {...field}
-                    isMulti
-                    options={[]}
-                   
-                  />
-                )}
-              />
-              </div>
-
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="member_no" value="Cluster Leader:" />
-                </div>
-                <TextInput
-                  id="cluster_leader"
-                  type="text"
-                  placeholder="John Doe"
-                  {...register("cluster_leader")}
-                  required
-                />
-              </div>
-
-              <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="member_no" value="Join Date:" />
-                </div>
-                <TextInput
-                  id="join_date"
-                  type="date"
-                  value={new Date().toISOString().split("T")[0]}
-                  {...register("join_date")}
-                  disabled
-                />
-              </div>
-            </div>
-            <div>
-              <div className="flex w-full items-center justify-center">
-                <Label htmlFor="dropzone-file">
-                  <input type="file" {...register("profile")} id="profile" />
-                </Label>
-              </div>
-
-              <br />
-            </div>
-            <Button type="submit">Save</Button>
-          </form>
-        </div>
-      </div>
-    </>
-  );
-}
+                  type="text

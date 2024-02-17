@@ -18,7 +18,7 @@ export type FormData = {
   cluster: string;
   cluster_leader: string;
   join_date: Date;
-  profile:  File | null;
+  profile:  FileList ;
 };
 
 export default function Form() {
@@ -75,6 +75,7 @@ export default function Form() {
             district: updatedMember.district,
             cluster: updatedMember.cluster,
             cluster_leader: updatedMember.cluster_leader,
+            profile: updatedMember.profile,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +133,7 @@ export default function Form() {
         placeholder="Search"
         className="flex justify-center mx-auto w-[90vw] rounded-md"
       />
-      <div className="flex flex-col flex-wrap items-center overflow-auto h-[90vh]">
+      <div className="flex flex-col flex-wrap items-center overflow-auto max-h-[90vh]">
         {search.length > 0 && (
           <table className="table w-[90vw]">
             <thead>

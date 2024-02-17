@@ -29,15 +29,9 @@ routes.get("/", (req, res) => {
 
 routes.post("/new", upload.single("profile"), (req, res) => {
   const newMember = new memberSchema({
-    member_no: req.body.member_no,
-    name:req.body.name,
-    id:req.body.id,
-    telephone:req.body.telephone,
-    district:req.body.district,
-    cluster_leader:req.body.cluster_leader,
+    body:req.body,
+    profile: req.files,
     cluster: req.body.cluster,
-    join_date:req.body.join_date,
-    profile: req.file,
   });
 
 
@@ -59,10 +53,10 @@ routes.get("/:id", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-routes.patch("/:id", async (req, res) => {
+routes.patch("/:id", upload.single("profile"),async (req, res) => {
   const id = req.params.id;
   try {
-    const updatedMember = await memberSchema.findByIdAndUpdate(id, req.body, {
+    const updatedMember = await memberSchema.findByIdAndUpdate(id, req.body, req.files, {
       new: true,
     });
     if (!updatedMember) {

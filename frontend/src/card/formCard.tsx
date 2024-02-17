@@ -1,9 +1,11 @@
-import { Label, TextInput, Card, Button, Modal, Select } from "flowbite-react";
+import { Label, TextInput, Card, Button, Modal, Select, FileInput } from "flowbite-react";
+import { Controller, useForm } from "react-hook-form";
 import Creatable from "react-select/creatable";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-expect-error
 export default function FormCard({selectedMember, handleSave, handleSaveToDb,openModal,setOpenModal}) {
+  const { control } = useForm();
 return(
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Member Form</Modal.Header>
@@ -28,11 +30,11 @@ return(
               </div>
               <div>
                 <Label htmlFor="first_name" className="mb-1">
-                  First name
+                  Name
                 </Label>
                 <TextInput
                   type="text"
-                  id="first_name"
+                  id="name"
                   value={selectedMember.name}
                   onChange={(e) =>
                     handleSave({
@@ -48,7 +50,7 @@ return(
                 </Label>
                 <TextInput
                   type="number"
-                  id="cluster"
+                  id="member_id"
                   value={selectedMember.id}
                   onChange={(e) =>
                     handleSave({
@@ -64,7 +66,7 @@ return(
                 </Label>
                 <TextInput
                   type="text"
-                  id="cluster"
+                  id="town"
                   value={selectedMember.district}
                   onChange={(e) =>
                     handleSave({
@@ -75,29 +77,32 @@ return(
                 />
               </div>
               <div>
+                <div >
+                  <Label htmlFor="cluster" className="mb-1">Cluster:</Label>
+                </div>
+                <TextInput 
+                type="tel"
+                id="tel"
+                value={selectedMember.cluster} onChange={(e)=> handleSave({
+                  ...selectedMember, cluster: e.target.value
+                })}
+                
+                />
+              </div>
+
+              <div>
                 <Label htmlFor="telephone" className="mb-1">
                   Member Telephone
                 </Label>
                 <TextInput
                   type="tel"
-                  id="cluster"
-                  value={selectedMember.telephone}
-                  onChange={(e) =>
-                    handleSave({
-                      ...selectedMember,
-                      telephone: e.target.value,
-                    })
-                  }
+                  id="tel"
+                  value={selectedMember.telephone} onChange={(e)=> handleSave({
+                    ...selectedMember, telephone: e.target.value
+                  })}
                   />
               </div>
-              <div >
-              <div className=" block">
-                <Label htmlFor="cluster" value="Cluster:" />
-              </div>
-            <TextInput type="cluster" typeof="checkbox" value={selectedMember.cluster} onChange={(e)=> handleSave({
-              ...selectedMember, cluster: e.target.value
-            })} />
-            </div>
+              
               <div>
                 <Label htmlFor="email" className="mb-1">
                   Cluster Leader
@@ -137,11 +142,13 @@ return(
               </div>
             </div>
             <div className="flex flex-col justify-center items-start gap-2 mt-3">
+            
             <Card className="max-w-sm p-3 w-[25rem] "
         imgAlt={selectedMember.name}
-        imgSrc={`http://localhost:3000/${selectedMember.profile}`}>
+        imgSrc={`http://localhost:3000/uploads/${selectedMember.profile}`}>
                       
                     </Card>
+                    <FileInput typeof="file"  onChange={(e)=> handleSave({...selectedMember, profile : e.target.files[0].name})} />
               <Button type="submit" onClick={() => handleSaveToDb(selectedMember)}>
                 Update
               </Button>

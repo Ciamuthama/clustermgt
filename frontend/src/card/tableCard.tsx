@@ -8,7 +8,7 @@ export default function TableCard({ member, index, handleMemberSelection }) {
     <tr key={index} onClick={() => handleMemberSelection(member._id)}>
       <td>
         <Avatar
-          img={`http://localhost:3000/${member.profile}`}
+          img={`http://localhost:3000/uploads/${member.profile}`}
           rounded
           className="border-0"
         ></Avatar>

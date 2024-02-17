@@ -4,16 +4,16 @@ const Schema = mongoose.Schema;
 
 const newSchema = new Schema({
   member_no: {
-    type: Number,
+    type: String,
   },
   name: {
     type: String,
   },
   id: {
-    type: Number,
+    type: String,
   },
   telephone: {
-    type: Number,
+    type: String,
   },
   
   district: {
