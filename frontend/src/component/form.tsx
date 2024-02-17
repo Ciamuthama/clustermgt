@@ -5,6 +5,9 @@ import TableCard from "../card/tableCard";
 import NewMemberCard from "../card/newMemberCard";
 import { TextInput } from "flowbite-react";
 
+
+
+
 export type FormData = {
   _id: string;
   member_no: number | string;
@@ -14,7 +17,7 @@ export type FormData = {
   district: string;
   cluster: string;
   cluster_leader: string;
-  date_joined: string | Date;
+  join_date: Date;
   profile:  File | null;
 };
 
@@ -80,6 +83,8 @@ export default function Form() {
       );
 
       const response = await patchNote.json();
+      console.log(response);
+      
      
     } catch (error) {
       console.error("An error occurred:", error);

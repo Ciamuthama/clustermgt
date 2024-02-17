@@ -25,11 +25,12 @@ const newSchema = new Schema({
   },
   join_date:{
     type: Date,
+    default:Date.now()
   },
   profile:{
     type:String
   }
-});
+},{timestamps:true});
 
 const memberSchema = mongoose.model("Member", newSchema);
 

@@ -5,24 +5,19 @@ const multer = require("multer");
 const routes = express.Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads')
+    cb(null, "./uploads");
   },
   filename: function (req, file, cb) {
-    
-    cb(null, file.originalname)
-  }
-})
+    cb(null, file.originalname);
+  },
+});
 
+const upload = multer({ storage: storage });
 
-
-const upload = multer({ storage: storage })
-
-
-
-routes.use((req, res, next) => {
+routes.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST,PATCH");
-  next();
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH");
+  res.sendStatus(200);
 });
 
 routes.get("/", (req, res) => {
@@ -32,17 +27,25 @@ routes.get("/", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-routes.post("/new", (req, res) => {
+routes.post("/new", upload.single("profile"), (req, res) => {
   const newMember = new memberSchema({
-    ...req.body,
-   
-    cluster: req.body.cluster.replace(/\s+/g, "").split(","),
+    member_no: req.body.member_no,
+    name:req.body.name,
+    id:req.body.id,
+    telephone:req.body.telephone,
+    district:req.body.district,
+    cluster_leader:req.body.cluster_leader,
+    cluster: req.body.cluster,
+    join_date:req.body.join_date,
+    profile: req.file,
   });
+
+
 
   newMember
     .save()
-    .then(() => {
-      res.status(200).json({ message: "Member added successfully" });
+    .then((results) => {
+      res.status(200).json({ message: "Member added successfully", results });
     })
     .catch((error) => console.log(error));
 });

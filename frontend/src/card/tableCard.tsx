@@ -19,9 +19,9 @@ export default function TableCard({ member, index, handleMemberSelection }) {
       <td className="mt-1 truncate leading-5">{member.id}</td>
       <td className="mt-1 truncate leading-5">{member.telephone}</td>
       <td className="mt-1 truncate leading-5">{member.district}</td>
-      <td className="mt-1 truncate leading-5 ">{member.cluster}</td>
+      <td className="mt-1 truncate leading-5 ">{member.cluster} </td>
       <td className="mt-1 truncate leading-5">{member.cluster_leader}</td>
-      <td className="mt-1 truncate leading-5">Joined in August 2017</td>
+      <td className="mt-1 truncate leading-5">Joined in {member.join_date}</td>
     </tr>
   );
 }

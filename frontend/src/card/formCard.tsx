@@ -16,6 +16,7 @@ return(
                 <TextInput
                   type="number"
                   id="cluster"
+                  disabled
                   value={selectedMember.member_no}
                   onChange={(e) =>
                     handleSave({
@@ -68,7 +69,7 @@ return(
                   onChange={(e) =>
                     handleSave({
                       ...selectedMember,
-                      cluster: e.target.value,
+                      district: e.target.value,
                     })
                   }
                 />
@@ -93,11 +94,9 @@ return(
               <div className=" block">
                 <Label htmlFor="cluster" value="Cluster:" />
               </div>
-             <Select name="cluster" id="cluster" multiple>
-              {selectedMember.cluster.map((c)=>
-              <option>{c}</option>
-              )}
-             </Select>
+            <TextInput type="cluster" typeof="checkbox" value={selectedMember.cluster} onChange={(e)=> handleSave({
+              ...selectedMember, cluster: e.target.value
+            })} />
             </div>
               <div>
                 <Label htmlFor="email" className="mb-1">
@@ -124,6 +123,7 @@ return(
                 <TextInput
                   type="text"
                   id="cluster"
+                  disabled
                   value={selectedMember.join_date}
                   readOnly
                   required
