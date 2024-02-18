@@ -24,8 +24,7 @@ const newSchema = new Schema({
     type: String,
   },
   join_date:{
-    type: Date,
-    default:Date.now()
+    type: String,
   },
   profile:{
     type:String

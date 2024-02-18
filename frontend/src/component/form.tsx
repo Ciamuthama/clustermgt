@@ -83,8 +83,8 @@ export default function Form() {
         }
       );
 
-      const response = await patchNote.json();
-      console.log(response);
+      await patchNote.json();
+      
       
      
     } catch (error) {

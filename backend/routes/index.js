@@ -29,8 +29,8 @@ routes.get("/", (req, res) => {
 
 routes.post("/new", upload.single("profile"), (req, res) => {
   const newMember = new memberSchema({
-    body:req.body,
-    profile: req.files,
+    ...req.body,
+    profile: req.file,
     cluster: req.body.cluster,
   });
 
