@@ -1,21 +1,23 @@
 const express = require("express");
 const memberSchema = require("../schema/schema");
 const multer = require("multer");
+const fs = require('fs');
 
 const routes = express.Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads");
+    cb(null, '/uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  }
+})
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage })
 
 routes.options("*", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5174");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH");
   res.sendStatus(200);
 });
@@ -40,6 +42,7 @@ routes.post("/new", upload.single("profile"), (req, res) => {
     .save()
     .then((results) => {
       res.status(200).json({ message: "Member added successfully", results });
+      res.redirect("/")
     })
     .catch((error) => console.log(error));
 });

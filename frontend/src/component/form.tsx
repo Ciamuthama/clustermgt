@@ -3,7 +3,7 @@ import axios from "axios";
 import FormCard from "../card/formCard";
 import TableCard from "../card/tableCard";
 import NewMemberCard from "../card/newMemberCard";
-import { TextInput } from "flowbite-react";
+import { TextInput, Pagination } from "flowbite-react";
 
 
 
@@ -27,8 +27,10 @@ export default function Form() {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState<FormData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
+  // const [totalItems, setTotalItems] = useState(0);
   const pageSize = members.length > 0 ? members.length : 10
+
+  const onPageChange = (page: number) => setCurrentPage(page);
   
   
 
@@ -38,7 +40,7 @@ export default function Form() {
         const response = await axios.get(`http://localhost:3000?page=${currentPage}&pageSize=${pageSize}`);
         setMembers(response.data);
         setSearch(response.data);
-        setTotalItems(response.headers['x-total-count'])
+       
 
         if (selectedMemberId === 1 && response.data.length > 0) {
           setSelectedMemberId(response.data[0]._id);
@@ -75,10 +77,10 @@ export default function Form() {
             district: updatedMember.district,
             cluster: updatedMember.cluster,
             cluster_leader: updatedMember.cluster_leader,
-            profile: updatedMember.profile,
+            profile: updatedMember.profile[0].name,
           }),
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type':"application/json"
           },
         }
       );
@@ -91,6 +93,8 @@ export default function Form() {
       console.error("An error occurred:", error);
     }
   };
+
+ 
 
   const selectedMember = members.find(
     (member) => member._id === selectedMemberId
@@ -133,7 +137,7 @@ export default function Form() {
         placeholder="Search"
         className="flex justify-center mx-auto w-[90vw] rounded-md"
       />
-      <div className="flex flex-col flex-wrap items-center overflow-auto max-h-[90vh]">
+      <div className="flex flex-col flex-wrap items-center overflow-auto max-h-[60vh]">
         {search.length > 0 && (
           <table className="table w-[90vw]">
             <thead>
@@ -164,21 +168,7 @@ export default function Form() {
         )}
       </div>
         <div className="flex items-center justify-center mt-4">
-        <button
-          className="btn mx-2 px-4 py-2 border rounded"
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous Page
-        </button>
-        {currentPage}
-        <button
-          className="btn mx-2 px-4 py-2 border rounded"
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={pageSize * currentPage >= totalItems} // Disable "Next Page" when the current page exceeds the total items
-        >
-          Next Page
-        </button>
+        <Pagination layout="table"  currentPage={currentPage} totalPages={pageSize}  onPageChange={onPageChange} />
       </div>
       {selectedMember && (
         <FormCard

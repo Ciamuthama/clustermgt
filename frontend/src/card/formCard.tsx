@@ -1,15 +1,22 @@
+import axios from "axios";
 import { Label, TextInput, Card, Button, Modal, Select, FileInput } from "flowbite-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Creatable from "react-select/creatable";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-expect-error
 export default function FormCard({selectedMember, handleSave, handleSaveToDb,openModal,setOpenModal}) {
-  const { control } = useForm();
+  const [remove,setRemove] = useState([])
+
+  const handleDelete=()=>{
+    axios.delete(`http://localhost:3000/${selectedMember._id}`)
+    window.location.href='/'
+  }
 return(
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Member Form</Modal.Header>
-          <Modal.Body><form className=" flex gap-2 flex-wrap justify-center" onSubmit={handleSaveToDb(selectedMember)}>
+          <Modal.Body><form className=" flex gap-2 flex-wrap justify-center" encType="multipart/form-data" onSubmit={()=> handleSaveToDb(selectedMember)}>
             <div className="grid grid-cols-2 gap-x-4 gap-y-0">
               <div className="w-[259px]">
                 <Label htmlFor="email" className="mb-1">
@@ -76,19 +83,6 @@ return(
                   }
                 />
               </div>
-              <div>
-                <div >
-                  <Label htmlFor="cluster" className="mb-1">Cluster:</Label>
-                </div>
-                <TextInput 
-                type="tel"
-                id="tel"
-                value={selectedMember.cluster} onChange={(e)=> handleSave({
-                  ...selectedMember, cluster: e.target.value
-                })}
-                
-                />
-              </div>
 
               <div>
                 <Label htmlFor="telephone" className="mb-1">
@@ -103,6 +97,18 @@ return(
                   />
               </div>
               
+              <div>
+                <div >
+                  <Label htmlFor="cluster" className="mb-1">Cluster:</Label>
+                </div>
+                <TextInput 
+                type="tel"
+                id="tel"
+                value={selectedMember.cluster} onChange={(e)=> handleSave({
+                  ...selectedMember, cluster: e.target.value
+                })}
+                />
+              </div>
               <div>
                 <Label htmlFor="email" className="mb-1">
                   Cluster Leader
@@ -135,13 +141,13 @@ return(
                   onChange={(e) =>
                     handleSave({
                       ...selectedMember,
-                      cluster_leader: e.target.value,
+                      join_date: e.target.value,
                     })
                   }
                 />
               </div>
             </div>
-            <div className="flex flex-col justify-center items-start gap-2 mt-3">
+            <div className="flex flex-col  gap-2 mt-3">
             
             <Card className="max-w-sm p-3 w-[25rem] "
         imgAlt={selectedMember.name}
@@ -152,10 +158,8 @@ return(
               <Button type="submit" onClick={() => handleSaveToDb(selectedMember)}>
                 Update
               </Button>
+              <Button className="btn bg-red-600 hover:!bg-red-700" onClick={handleDelete}>Delete</Button>
               </div>
-              
-           
-             
           </form>
           </Modal.Body>
           </Modal>
