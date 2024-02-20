@@ -38,24 +38,28 @@ export default function NewMemberCard({
       cluster: data.cluster.map((tag) => tag.label).join(","),
       cluster_leader: data.cluster_leader,
       join_date: data.join_date || new Date().toISOString().substr(0, 10),
-      profile: data.profile[0].name,
+      profile: data.profile[0],
     };
 
     console.log(member);
-
-    return axios.post("http://localhost:3000/new", member,{
+    
+    return axios.post("http://localhost:3000/new", member, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
   };
+
+  const reloadFunction =()=>{
+    setTimeout(function(){location.reload()},2000);
+  }
 
   return (
     <>
       <div className="flex h-screen bg-white">
         <div>
           <form
-          method="/new"
+            method="/new"
             className="mt-5 mx-8"
             onSubmit={handleSubmit(onSubmit)}
             encType="multipart/form-data"
@@ -158,21 +162,19 @@ export default function NewMemberCard({
                   id="join_date"
                   type="date"
                   {...register("join_date")}
-                  value={new Date().toISOString().substr(0, 10)}
-                  disabled
                 />
               </div>
             </div>
             <div>
               <div className="flex w-full items-center justify-center">
                 <Label htmlFor="profile">
-                  <input type="file" {...register("profile")} id="profile" />
+                  <input type="file" {...register("profile")} accept=".jpg, .jpeg, .png" id="profile" />
                 </Label>
               </div>
 
               <br />
             </div>
-            <Button type="submit" >Save</Button>
+            <Button type="submit" onClick={reloadFunction}>Save</Button>
           </form>
         </div>
       </div>

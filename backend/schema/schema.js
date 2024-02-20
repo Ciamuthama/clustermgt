@@ -27,7 +27,7 @@ const newSchema = new Schema({
     type: String,
   },
   profile:{
-    type:String
+    type: String
   }
 },{timestamps:true});
 

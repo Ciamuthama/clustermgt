@@ -6,21 +6,21 @@ const fs = require('fs');
 const routes = express.Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/uploads')
+    cb(null, './uploads')
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
+    cb(null, file.originalname )
   }
 })
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage })
 
 routes.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5174");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH");
   res.sendStatus(200);
 });
+
 
 routes.get("/", (req, res) => {
   memberSchema
@@ -32,7 +32,7 @@ routes.get("/", (req, res) => {
 routes.post("/new", upload.single("profile"), (req, res) => {
   const newMember = new memberSchema({
     ...req.body,
-    profile: req.file,
+    profile: req.files || req.file.originalname,
     cluster: req.body.cluster,
   });
 
@@ -56,10 +56,10 @@ routes.get("/:id", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-routes.patch("/:id", upload.single("profile"),async (req, res) => {
+routes.patch("/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const updatedMember = await memberSchema.findByIdAndUpdate(id, req.body, req.files, {
+    const updatedMember = await memberSchema.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     if (!updatedMember) {
@@ -76,11 +76,21 @@ routes.delete("/:id", (req, res) => {
   memberSchema
     .findByIdAndDelete(id)
     .then((result) => {
-      res.json("Data successfully deleted");
+      // Delete the associated file
+      const filePath = path.join(__dirname, `uploads/${result.profile}`);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(`Error deleting file: ${err}`);
+          res.status(500).json("Error deleting file");
+        } else {
+          res.json("Member and associated file successfully deleted");
+        }
+      });
     })
     .catch((err) => {
-      res.status(404).json(`ERROR${err}`);
+      res.status(404).json(`ERROR: ${err}`);
     });
 });
+
 
 module.exports = routes;

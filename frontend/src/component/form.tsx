@@ -77,7 +77,7 @@ export default function Form() {
             district: updatedMember.district,
             cluster: updatedMember.cluster,
             cluster_leader: updatedMember.cluster_leader,
-            profile: updatedMember.profile[0].name,
+            //profile: updatedMember.profile,
           }),
           headers: {
             'Content-Type':"application/json"
@@ -85,7 +85,9 @@ export default function Form() {
         }
       );
 
-      await patchNote.json();
+const sendData = await patchNote.json();
+console.log(sendData);
+
       
       
      
@@ -141,7 +143,7 @@ export default function Form() {
         {search.length > 0 && (
           <table className="table w-[90vw]">
             <thead>
-              <tr>
+              <tr className="font-bold text-center uppercase text-[0.85rem] text-black">
                 <th>Avatar</th>
                 <th>Member Number</th>
                 <th>Member Name</th>
@@ -167,9 +169,9 @@ export default function Form() {
           </table>
         )}
       </div>
-        <div className="flex items-center justify-center mt-4">
+        {/* <div className="flex items-center justify-center mt-4">
         <Pagination layout="table"  currentPage={currentPage} totalPages={pageSize}  onPageChange={onPageChange} />
-      </div>
+      </div> */}
       {selectedMember && (
         <FormCard
           selectedMember={selectedMember}

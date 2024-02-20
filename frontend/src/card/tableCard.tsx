@@ -5,14 +5,15 @@ import { Avatar } from "flowbite-react";
 
 export default function TableCard({ member, index, handleMemberSelection }) {
   return (
-    <tr key={index} onClick={() => handleMemberSelection(member._id)}>
+    <tr key={index} onClick={() => handleMemberSelection(member._id)} className="text-center">
       <td>
         <Avatar
           img={`http://localhost:3000/uploads/${member.profile}`}
           rounded
-          className="border-0"
+          size="md"
+          bordered
+          color=""
         ></Avatar>
-        
       </td>
       <td className="mt-1 truncate leading-5">{member.member_no}</td>
       <td className="text-sm font-semibold leading-6 ">{member.name}</td>
