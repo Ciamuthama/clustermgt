@@ -1,11 +1,9 @@
 require("dotenv").config();
-
 const express = require("express");
 const bodyparse = require("body-parser")
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const gridStream = require("gridfs-stream")
 const Route =  require("./routes/index.js")
 
 const app = express();
@@ -26,12 +24,6 @@ mongoose
   .catch((err) => {
     console.log(err);
   })
-
-// const conn = mongoose.createConnection(process.env.API_URL)
-// conn.once( "open", ()=>{
-//   gfs = gridStream(conn.db, mongoose.mongo)
-//   gfs.collection("uploads")
-// })
 
   app.use('/', Route)
 

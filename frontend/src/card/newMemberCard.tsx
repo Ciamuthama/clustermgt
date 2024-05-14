@@ -24,7 +24,7 @@ export default function NewMemberCard({
 }: {
   getNextMemberNumber: () => number;
 }) {
-  const { control, handleSubmit, register } = useForm();
+  const { control, handleSubmit, register } = useForm<NewMember>();
   const newNumber = getNextMemberNumber();
 
   const onSubmit: SubmitHandler<NewMember> = (data) => {
@@ -56,7 +56,7 @@ export default function NewMemberCard({
 
   return (
     <>
-      <div className="flex h-screen bg-white">
+      <div className="flex h-[97vh] rounded-md bg-white">
         <div>
           <form
             method="/new"
@@ -64,7 +64,7 @@ export default function NewMemberCard({
             onSubmit={handleSubmit(onSubmit)}
             encType="multipart/form-data"
           >
-            <div className=" grid grid-cols-2 gap-6 mb-5 ">
+            <div className=" grid grid-cols-2 gap-6 mb-5">
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="member_no" value="Member number:" />

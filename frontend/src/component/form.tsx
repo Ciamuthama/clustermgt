@@ -3,7 +3,7 @@ import axios from "axios";
 import FormCard from "../card/formCard";
 import TableCard from "../card/tableCard";
 import NewMemberCard from "../card/newMemberCard";
-import { TextInput, Pagination } from "flowbite-react";
+import { TextInput} from "flowbite-react";
 
 
 
@@ -23,26 +23,19 @@ export type FormData = {
 
 export default function Form() {
   const [members, setMembers] = useState<FormData[]>([]);
-  const [selectedMemberId, setSelectedMemberId] = useState(1);
+  const [selectedMemberId, setSelectedMemberId] = useState<string>("1");
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState<FormData[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [totalItems, setTotalItems] = useState(0);
   const pageSize = members.length > 0 ? members.length : 10
-
-  const onPageChange = (page: number) => setCurrentPage(page);
-  
-  
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000?page=${currentPage}&pageSize=${pageSize}`);
+        const response = await axios.get(`http://localhost:3000`);
         setMembers(response.data);
         setSearch(response.data);
-       
 
-        if (selectedMemberId === 1 && response.data.length > 0) {
+        if (selectedMemberId === "1" && response.data.length > 0) {
           setSelectedMemberId(response.data[0]._id);
         }
       } catch (error) {
@@ -50,9 +43,9 @@ export default function Form() {
       }
     };
     fetchData();
-  }, [selectedMemberId, currentPage, pageSize]);
+  }, [selectedMemberId, pageSize]);
 
-  const handleMemberSelection = (_id: React.SetStateAction<number>) => {
+  const handleMemberSelection = (_id: string) => {
     setSelectedMemberId(_id);
   };
 
@@ -77,7 +70,6 @@ export default function Form() {
             district: updatedMember.district,
             cluster: updatedMember.cluster,
             cluster_leader: updatedMember.cluster_leader,
-            //profile: updatedMember.profile,
           }),
           headers: {
             'Content-Type':"application/json"
@@ -85,18 +77,12 @@ export default function Form() {
         }
       );
 
-const sendData = await patchNote.json();
-console.log(sendData);
-
-      
-      
-     
+      const sendData = await patchNote.json();
+      console.log(sendData);
     } catch (error) {
       console.error("An error occurred:", error);
     }
   };
-
- 
 
   const selectedMember = members.find(
     (member) => member._id === selectedMemberId
@@ -126,8 +112,6 @@ console.log(sendData);
       ? Number(sortedMembers[0].member_no) + 1
       : 1;
   };
-
-
 
   return (
     <div className="flex flex-col h-full mt-4 mx-3 gap-10 bg-white">
@@ -169,9 +153,6 @@ console.log(sendData);
           </table>
         )}
       </div>
-        {/* <div className="flex items-center justify-center mt-4">
-        <Pagination layout="table"  currentPage={currentPage} totalPages={pageSize}  onPageChange={onPageChange} />
-      </div> */}
       {selectedMember && (
         <FormCard
           selectedMember={selectedMember}
@@ -197,7 +178,7 @@ console.log(sendData);
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="w-[40vw]">
+          <div className="w-[40vw] m-3">
             <NewMemberCard getNextMemberNumber={getNextMemberNumber}/>
           </div>
         </div>
