@@ -163,7 +163,7 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
           </div>
           <div className="flex flex-col  gap-2 mt-3">
             <img src={`http://localhost:3000/uploads/${selectedMember.profile}`} className="h-[20rem] w-[20rem] rounded shadow-sm shadow-black"/>
-            <input type="hidden" name="profile" id="profile" onChange={(e)=> handleSave({...selectedMember, profile: e.target.files[0]})} />
+            <input type="hidden" name="profile" id="profile" onChange={(e)=> handleSave({...selectedMember, profile: e.target.files ? e.target.files[0] : null})} />
             <Button
               type="submit"
               onClick={() => handleSaveToDb(selectedMember)}
