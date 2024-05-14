@@ -43,7 +43,7 @@ export default function NewMemberCard({
 
     console.log(member);
     
-    return axios.post("http://localhost:3000/new", member, {
+    return axios.post("https://clustermgtapi.vercel.app/new", member, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

@@ -59,7 +59,7 @@ export default function Form() {
   const handleSaveToDb = async (updatedMember: FormData) => {
     try {
       const patchNote = await fetch(
-        `http://localhost:3000/${updatedMember._id}`,
+        `https://clustermgtapi.vercel.app/${updatedMember._id}`,
         {
           method: "PATCH",
           body: JSON.stringify({
