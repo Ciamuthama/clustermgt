@@ -27,32 +27,54 @@ export default function NewMemberCard({
   const { control, handleSubmit, register } = useForm<NewMember>();
   const newNumber = getNextMemberNumber();
 
-  const onSubmit: SubmitHandler<NewMember> = (data) => {
-   
-    const member = {
-      member_no: data.member_no || newNumber,
-      name: data.name,
-      id: data.id.toString(),
-      telephone: data.telephone.toString(),
-      district: data.district,
-      cluster: data.cluster.map((tag) => tag.label).join(","),
-      cluster_leader: data.cluster_leader,
-      join_date: data.join_date || new Date().toISOString().substr(0, 10),
-      profile: data.profile[0],
-    };
+  const onSubmit: SubmitHandler<NewMember> = async (data) => {
+    const formData = new FormData();
 
-    console.log(member);
-    
-    return axios.post("https://clustermgtapi.vercel.app/new", member, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    formData.append(
+      "member_no",
+      data.member_no ? data.member_no.toString() : newNumber.toString()
+    );
+    formData.append("name", data.name);
+    formData.append("id", data.id.toString());
+    formData.append("telephone", data.telephone.toString());
+    formData.append("district", data.district);
+    formData.append("cluster", data.cluster.map((tag) => tag.label).join(","));
+    formData.append("cluster_leader", data.cluster_leader);
+    let joinDate;
+    if (data.join_date) {
+      joinDate = new Date(data.join_date);
+      if (!isNaN(joinDate.getTime())) { // check if it's a valid date
+        formData.append("join_date", joinDate.toLocaleDateString());
+      } else {
+        console.error('Invalid date format');
+      }
+    } else {
+      joinDate = new Date();
+      formData.append("join_date", joinDate.toLocaleDateString());
+    }
+
+    // Append the profile image file
+    if (data.profile && data.profile[0]) {
+      formData.append("profile", data.profile[0]);
+    }
+
+    try {
+      const response = await axios.post("https://clustermgtapi.vercel.app/new", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
   };
 
-  const reloadFunction =()=>{
-    setTimeout(function(){location.reload()},2000);
-  }
+  const reloadFunction = () => {
+    setTimeout(function () {
+      location.reload();
+    }, 2000);
+  };
 
   return (
     <>
@@ -168,13 +190,20 @@ export default function NewMemberCard({
             <div>
               <div className="flex w-full items-center justify-center">
                 <Label htmlFor="profile">
-                  <input type="file" {...register("profile")} accept=".jpg, .jpeg, .png" id="profile" />
+                  <input
+                    type="file"
+                    {...register("profile")}
+                    accept=".jpg, .jpeg, .png"
+                    id="profile"
+                  />
                 </Label>
               </div>
 
               <br />
             </div>
-            <Button type="submit" onClick={reloadFunction}>Save</Button>
+            <Button type="submit" onClick={reloadFunction}>
+              Save
+            </Button>
           </form>
         </div>
       </div>

@@ -4,19 +4,12 @@ const multer = require("multer");
 const fs = require('fs');
 
 const routes = express.Router();
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname )
-  }
-})
+const storage = multer.memoryStorage()
 
 const upload = multer({ storage })
 
 routes.options("*", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5174");
+  res.setHeader("Access-Control-Allow-Origin", "https://clustermgt.vercel.app");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH");
   res.sendStatus(200);
 });
@@ -31,9 +24,18 @@ routes.get("/", (req, res) => {
 
 routes.post("/new", upload.single("profile"), (req, res) => {
   const newMember = new memberSchema({
-    ...req.body,
-    profile: req.files || req.file.originalname,
-    cluster: req.body.cluster,
+      member_no: req.body.member_no,
+      name: req.body.name,
+      id: req.body.id,
+      telephone: req.body.telephone,
+      district: req.body.district,
+      cluster: req.body.cluster,
+      cluster_leader: req.body.cluster_leader,
+      join_date: req.body.join_date,
+      profile: req.file ? {
+        data: req.file.buffer,
+        contentType: req.file.mimetype
+      } : undefined,
   });
 
 
@@ -45,6 +47,20 @@ routes.post("/new", upload.single("profile"), (req, res) => {
       res.redirect("/")
     })
     .catch((error) => console.log(error));
+});
+
+routes.get("/profile/:id", (req, res) => {
+  const id = req.params.id;
+
+  memberSchema.findById(id)
+    .then(result => {
+      if (!result || !result.profile || !result.profile.data) {
+        return res.status(404).json({ error: "Image not found" });
+      }
+      res.contentType(result.profile.contentType);
+      res.send(result.profile.data);
+    })
+    .catch(err => res.status(500).json({ error: `Internal Server Error: ${err.message}` }));
 });
 
 routes.get("/:id", (req, res) => {
