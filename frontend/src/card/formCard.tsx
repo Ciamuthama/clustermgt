@@ -10,7 +10,7 @@ import {
 //@ts-expect-error
 export default function FormCard({selectedMember,handleSave,handleSaveToDb,openModal,setOpenModal,}) {
   const handleDelete = () => {
-    axios.delete(`http://localhost:3000/${selectedMember._id}`);
+    axios.delete(`https://clustermgtapi.vercel.app/${selectedMember._id}`);
     window.location.href = "/";
   };
   return (
