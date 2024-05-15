@@ -15,7 +15,7 @@ export type FormData = {
   id: number | string;
   telephone: number | string;
   district: string;
-  cluster:  [];
+  cluster: string;
   cluster_leader: string;
   join_date: Date;
   profile:  FileList ;
@@ -57,40 +57,20 @@ export default function Form() {
   };
 
   const handleSaveToDb = async (updatedMember: FormData) => {
-    
-    const formData = new FormData();
-
-    formData.append("member_no", updatedMember.member_no.toString() );
-    formData.append("name", updatedMember.name);
-    formData.append("id", updatedMember.id.toString());
-    formData.append("telephone", updatedMember.telephone.toString());
-    formData.append("district", updatedMember.district);
-    formData.append("cluster", updatedMember.cluster.toString());
-    formData.append("cluster_leader", updatedMember.cluster_leader);
-    let joinDate;
-    if (updatedMember.join_date) {
-      joinDate = new Date(updatedMember.join_date);
-      if (!isNaN(joinDate.getTime())) { // check if it's a valid date
-        formData.append("join_date", joinDate.toLocaleDateString());
-      } else {
-        console.error('Invalid date format');
-      }
-    } else {
-      joinDate = new Date();
-      formData.append("join_date", joinDate.toLocaleDateString());
-    }
-
-    // Append the profile image file
-    if (updatedMember.profile && updatedMember.profile[0]) {
-      formData.append("profile", updatedMember.profile[0]);
-    }
-
     try {
       const patchNote = await fetch(
         `https://clustermgtapi.vercel.app/${updatedMember._id}`,
         {
           method: "PATCH",
-          body:formData,
+          body: JSON.stringify({
+            member_no: updatedMember.member_no,
+            name: updatedMember.name,
+            id: updatedMember.id,
+            telephone: updatedMember.telephone,
+            district: updatedMember.district,
+            cluster: updatedMember.cluster,
+            cluster_leader: updatedMember.cluster_leader,
+          }),
           headers: {
             'Content-Type':"application/json"
           },

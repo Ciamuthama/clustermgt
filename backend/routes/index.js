@@ -9,7 +9,7 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage })
 
 routes.options("*", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://clustermgt.vercel.app");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH");
   res.sendStatus(200);
 });
