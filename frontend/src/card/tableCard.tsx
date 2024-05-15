@@ -10,14 +10,15 @@ export default function TableCard({
 }: {
   member: {
     _id: string;
-    member_no: string;
+    member_no: number | string;
     name: string;
-    id: string;
-    telephone: string;
+    id: number | string;
+    telephone: number | string;
     district: string;
     cluster: string;
     cluster_leader: string;
-    join_date: string;
+    join_date: Date ;
+    profile: FileList;
   };
   index: number;
   handleMemberSelection: (id: string) => void;
@@ -45,7 +46,9 @@ export default function TableCard({
       <td className="mt-1 truncate leading-5">{member.district}</td>
       <td className="mt-1 truncate leading-5 ">{member.cluster}</td>
       <td className="mt-1 truncate leading-5">{member.cluster_leader}</td>
-      <td className="mt-1 truncate leading-5">Joined in {member.join_date}</td>
+      <td className="mt-1 truncate leading-5">
+        Joined in {member.join_date.toString()}
+      </td>
     </tr>
   );
 }
