@@ -7,9 +7,21 @@ export default function TableCard({
   member,
   index,
   handleMemberSelection,
+}: {
+  member: {
+    _id: string;
+    member_no: string;
+    name: string;
+    id: string;
+    telephone: string;
+    district: string;
+    cluster: string;
+    cluster_leader: string;
+    join_date: string;
+  };
+  index: number;
+  handleMemberSelection: (id: string) => void;
 }) {
- 
-
   return (
     <tr
       key={index}
@@ -17,7 +29,14 @@ export default function TableCard({
       className="text-center"
     >
       <td>
-        <Avatar rounded size="md" bordered color="" id="profileImage" img={`https://clustermgtapi.vercel.app/profile/${member._id}`}/>
+        <Avatar
+          rounded
+          size="md"
+          bordered
+          color=""
+          id="profileImage"
+          img={`http://localhost:3000/profile/${member._id}`}
+        />
       </td>
       <td className="mt-1 truncate leading-5">{member.member_no}</td>
       <td className="text-sm font-semibold leading-6 ">{member.name}</td>
