@@ -90,9 +90,7 @@ export default function Form() {
         `https://clustermgtapi.vercel.app/${updatedMember._id}`,
         {
           method: "PATCH",
-          body: JSON.stringify({
-           formData
-          }),
+          body:formData,
           headers: {
             'Content-Type':"application/json"
           },
