@@ -165,7 +165,7 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
             <img src={`https://clustermgtapi.vercel.app/profile/${selectedMember._id}`} className="h-[20rem] w-[20rem] rounded shadow-sm shadow-black"/>
             <input type="hidden" name="profile" id="profile" onChange={(e)=> handleSave({...selectedMember, profile: e.target.files ? e.target.files[0] : null})} />
             <Button
-              type="submit"
+              
               onClick={() => handleSaveToDb(selectedMember)}
             >
               Update
