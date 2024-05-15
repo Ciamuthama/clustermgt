@@ -8,7 +8,7 @@ export default function TableCard({ member, index, handleMemberSelection }) {
     <tr key={index} onClick={() => handleMemberSelection(member._id)} className="text-center">
       <td>
         <Avatar
-          img={`https://clustermgt.vercel.app/profile/${member._id}`}
+          img={`https://clustermgtapi.vercel.app/profile/${member._id}`}
           rounded
           size="md"
           bordered
