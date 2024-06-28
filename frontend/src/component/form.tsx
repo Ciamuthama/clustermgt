@@ -178,7 +178,7 @@ export default function Form() {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="w-[40vw] m-3">
+          <div className="m-3">
             <NewMemberCard getNextMemberNumber={getNextMemberNumber}/>
           </div>
         </div>

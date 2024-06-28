@@ -78,7 +78,7 @@ export default function NewMemberCard({
 
   return (
     <>
-      <div className="flex h-[97vh] rounded-md bg-white">
+      <div className="flex pb-2.5 rounded-md bg-white">
         <div>
           <form
             method="/new"
@@ -92,6 +92,7 @@ export default function NewMemberCard({
                   <Label htmlFor="member_no" value="Member number:" />
                 </div>
                 <TextInput
+                className="w-auto"
                   id="member_no"
                   type="number"
                   {...register("member_no")}
@@ -100,10 +101,11 @@ export default function NewMemberCard({
                 />
               </div>
               <div>
-                <div className="mb-2 block  w-[25rem]">
+                <div className="mb-2 block">
                   <Label htmlFor="name" value="Member Name:" />
                 </div>
                 <TextInput
+                  className="w-auto"
                   id="name"
                   type="text"
                   placeholder="Member Name"
@@ -117,6 +119,7 @@ export default function NewMemberCard({
                   <Label htmlFor="id" value="Identity Number(ID):" />
                 </div>
                 <TextInput
+                className="w-auto"
                   id="id"
                   type="text"
                   inputMode="numeric"
@@ -130,6 +133,7 @@ export default function NewMemberCard({
                   <Label htmlFor="tel" value="Telephone:" />
                 </div>
                 <TextInput
+                className="w-auto"
                   id="telephone"
                   type="tel"
                   {...register("telephone")}
@@ -143,6 +147,7 @@ export default function NewMemberCard({
                   <Label htmlFor="district" value="District:" />
                 </div>
                 <TextInput
+                className="w-auto"
                   id="district"
                   type="text"
                   {...register("district")}
@@ -155,10 +160,11 @@ export default function NewMemberCard({
                   <Label htmlFor="cluster" value="Cluster:" />
                 </div>
                 <Controller
+                
                   {...register("cluster")}
                   control={control}
                   render={({ field }) => (
-                    <Creatable {...field} isMulti options={[]} />
+                    <Creatable {...field} isMulti options={[]} className="w-auto"/>
                   )}
                 />
               </div>
@@ -168,6 +174,7 @@ export default function NewMemberCard({
                   <Label htmlFor="member_no" value="Cluster Leader:" />
                 </div>
                 <TextInput
+                className="w-auto"
                   id="cluster_leader"
                   type="text"
                   placeholder="John Doe"
@@ -181,6 +188,7 @@ export default function NewMemberCard({
                   <Label htmlFor="member_no" value="Join Date:" />
                 </div>
                 <TextInput
+                className="w-auto"
                   id="join_date"
                   type="date"
                   {...register("join_date")}
@@ -188,9 +196,10 @@ export default function NewMemberCard({
               </div>
             </div>
             <div>
-              <div className="flex w-full items-center justify-center">
+              <div className="flex items-center justify-center">
                 <Label htmlFor="profile">
                   <input
+                  className="w-auto"
                     type="file"
                     {...register("profile")}
                     accept=".jpg, .jpeg, .png"
