@@ -23,12 +23,13 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
           onSubmit={() => handleSaveToDb(selectedMember)}
         >
           <div className="grid grid-cols-2 gap-x-4 gap-y-0">
-            <div className="w-[259px]">
-              <Label htmlFor="email" className="mb-1">
+            <div>
+              <Label htmlFor="member_no" className="mb-1">
                 Member Number
               </Label>
               <TextInput
                 type="number"
+                className="w-auto"
                 id="number"
                 disabled
                 value={selectedMember.member_no}
@@ -41,7 +42,7 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
               />
             </div>
             <div>
-              <Label htmlFor="first_name" className="mb-1">
+              <Label htmlFor="name" className="mb-1">
                 Name
               </Label>
               <TextInput
@@ -57,7 +58,7 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
               />
             </div>
             <div>
-              <Label htmlFor="email" className="mb-1">
+              <Label htmlFor="member_id" className="mb-1">
                 Member Id
               </Label>
               <TextInput
@@ -73,7 +74,7 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
               />
             </div>
             <div>
-              <Label htmlFor="text" className="mb-1">
+              <Label htmlFor="town" className="mb-1">
                 Town
               </Label>
               <TextInput
@@ -125,7 +126,7 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
               />
             </div>
             <div>
-              <Label htmlFor="email" className="mb-1">
+              <Label htmlFor="cluster_leader" className="mb-1">
                 Cluster Leader
               </Label>
               <TextInput
@@ -143,7 +144,7 @@ export default function FormCard({selectedMember,handleSave,handleSaveToDb,openM
             </div>
 
             <div>
-              <Label htmlFor="email" className="mb-1">
+              <Label htmlFor="join_date" className="mb-1">
                 join_date
               </Label>
               <TextInput
